@@ -138,15 +138,12 @@ export abstract class GameObject {
         return canMove && group
     }
 
-    readonly abstract image: svg | ((model: GameModel) => svg)
-    readonly character?: string
+    readonly abstract image: string | ((model: GameModel) => string)
+    readonly initFloor = false
 }
-
-export type svg = string
 
 export class Wall extends GameObject {
     image = wallImage
-    character = 'w'
 }
 
 // player, cube connectionDirs on all sides, player needs to be saved somewhere
