@@ -1,6 +1,15 @@
+import wallImage from "../assets/brickWall.svg"
+
 export class MapTile {
     element?: GameObject
     floorElement?: GameObject
+}
+
+export type Direction = 1 | 2 | 3 | 4
+
+type Coords = {
+    x: number,
+    y: number
 }
 
 export class GameModel {
@@ -99,19 +108,11 @@ export class GameModel {
     }
 }
 
-export type Direction = 1 | 2 | 3 | 4
-export type Coords = {
-    x: number,
-    y: number
-}
-
 export abstract class GameObject {
     x?: number
     y?: number
-    // 1 for top, 2 for right, 3 for bottom, 4 for left
-    readonly connectionDirs: Direction[] = []
     orientation: Direction = 1
-    
+    readonly connectionDirs: Direction[] = []
 
     // as of this time, only non floor elements can be connected
     getConnected(d: Direction, model: GameModel): GameObject | undefined {
@@ -136,4 +137,16 @@ export abstract class GameObject {
             .reduce((x,y) => x && y)
         return canMove && group
     }
+
+    readonly abstract image: svg | ((model: GameModel) => svg)
+    readonly character?: string
 }
+
+export type svg = string
+
+export class Wall extends GameObject {
+    image = wallImage
+    character = 'w'
+}
+
+// player, cube connectionDirs on all sides, player needs to be saved somewhere
