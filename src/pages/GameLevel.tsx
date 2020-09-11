@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './GameLevel.module.css'
 
-function App() {
+const GameLevel : React.FunctionComponent<{ gameChart: string }> = function GameLevel(props) {
+  console.log(props.gameChart)
   return (
     <div className={styles.map}>
       
@@ -9,4 +10,4 @@ function App() {
   );
 }
 
-export default App;
+export default GameLevel;

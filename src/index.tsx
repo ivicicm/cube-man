@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import GameLevel from './pages/GameLevel';
 import * as serviceWorker from './serviceWorker';
-
+import level from './levels/1.txt'
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <GameLevel />
+    <GameLevel gameChart={level}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

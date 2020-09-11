@@ -9,6 +9,11 @@ declare namespace NodeJS {
   }
 }
 
+declare module '*.txt' {
+  const src: string;
+  export default src;
+}
+
 declare module '*.bmp' {
   const src: string;
   export default src;
