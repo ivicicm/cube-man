@@ -51,13 +51,17 @@ export default class Controller {
             this.waitingForInput = false
             if(typeof d !== 'string' && this.player) {
                 let group = this.player.canMove(d, this.model)
-                if(group)
+                if(group) {
                     this.model.moveGroup(group, d)
+                    this.setToScreen(deepCopy(this.model))
+                }
             }
-            this.setToScreen(deepCopy(this.model))
+            else {
+                if(this.player && this.player.rotateIfPossible(d as 'rotate left' | 'rotate right', this.model))
+                    this.setToScreen(deepCopy(this.model))
+            }
         }
         finally {
-            console.log(this.player)
             this.waitingForInput = true
         }
     }

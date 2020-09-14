@@ -8,6 +8,7 @@ export class MapTile {
 }
 
 export type Direction = 0 | 1 | 2 | 3 
+export type Rotation = "rotate left" | "rotate right"
 
 type Coords = {
     x: number,
@@ -77,6 +78,31 @@ export class GameModel {
         return { x, y }
     }
 
+    rotateCoords(rotated: Coords, anchor: Coords, d: 'rotate right' | 'rotate left') {
+        let relCoords = {
+            x: rotated.x - anchor.x,
+            y: rotated.y - anchor.y
+        }
+        let relRotated: Coords
+        if(d === 'rotate left') {
+            relRotated = {
+                x: relCoords.y,
+                y: -relCoords.x
+            }
+        } else {
+            relRotated = {
+                x: -relCoords.y,
+                y: relCoords.x
+            }
+        }
+        let result = {
+            x: relRotated.x + anchor.x,
+            y: relRotated.y + anchor.y
+        }
+        return result.x >= 0 && result.x < this.map.length &&  result.y >= 0 && result.y < this.map[0].length ?
+            result : undefined
+    }
+
     getNeighbour(x: number, y: number, d: Direction, isFloor = false): GameObject | "blank" | "outOfMap" {
         let coords = this.translateCoords(x, y, d)
         if(!coords)
@@ -139,6 +165,23 @@ export abstract class GameObject {
             })
             .reduce((x,y) => x && y)
         return canMove ? group : undefined
+    }
+
+    rotateIfPossible(d: 'rotate right' | 'rotate left', model: GameModel) {
+        let group = model.getConnectedGroup(this)
+        let endCoords = group.map(o => model.rotateCoords(
+                { x: o.x as number, y: o.y as number},
+                { x: this.x as number, y: this.y as number},
+                d
+            ))
+        let canRotate = endCoords.map(c => c && ( !model.map[c.x][c.y].element || group.includes(model.map[c.x][c.y].element as GameObject )))
+            .reduce((x,y) => x && y)
+        if(canRotate)
+            group.forEach((o, index) => { 
+                model.placeObject(o, endCoords[index]?.x as number, endCoords[index]?.y as number, false)
+                o.orientation = ( o.orientation + 4 + (d === 'rotate left' ? -1 : 1 )) % 4 as Direction
+            })
+        return canRotate
     }
 
     readonly abstract image: string | ((model: GameModel) => string)

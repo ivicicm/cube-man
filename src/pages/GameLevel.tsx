@@ -28,6 +28,12 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
         case 'a':
           controller.playerMove(3)
           break
+        case 'q':
+          controller.playerMove("rotate left")
+          break
+        case 'e':
+          controller.playerMove("rotate right")
+          break
       }
     }
     document.addEventListener("keydown", keyDown)
