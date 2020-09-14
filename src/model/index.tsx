@@ -1,12 +1,13 @@
 import wallImage from "../assets/brickWall.svg"
 import playerImage from "../assets/player.svg"
+import cubeImage from "../assets/cube.svg"
 
 export class MapTile {
     element?: GameObject
     floorElement?: GameObject
 }
 
-export type Direction = 1 | 2 | 3 | 4
+export type Direction = 0 | 1 | 2 | 3 
 
 type Coords = {
     x: number,
@@ -48,25 +49,25 @@ export class GameModel {
 
     private translateCoords(x: number, y: number, d: Direction): Coords | undefined {
         switch(d) {
-            case 1: {
+            case 0: {
                 y--
                 if(y < 0)
                     return undefined
                 break
             }
-            case 2: {
+            case 1: {
                 x++
                 if(x >= this.map.length)
                     return undefined
                 break
             }
-            case 3: {
+            case 2: {
                 y++
                 if(y >= this.map[0].length)
                     return undefined
                 break
             }
-            case 4: {
+            case 3: {
                 x--
                 if(x < 0)
                     return undefined
@@ -80,7 +81,6 @@ export class GameModel {
         let coords = this.translateCoords(x, y, d)
         if(!coords)
             return "outOfMap"
-
         if(isFloor)
             return this.map[coords.x][coords.y].floorElement || "blank"
         else
@@ -93,10 +93,11 @@ export class GameModel {
         while(stack.length > 0) {
             let gameObject = stack.pop() as GameObject
             found.push(gameObject);
-            ([1, 2, 3, 4] as Direction[])
+            ([0, 1, 2, 3] as Direction[])
                 .map(d => gameObject.getConnected(d, this))
-                .filter(o => o && !found.includes(o))
+                .filter(o => o && !found.includes(o) && !stack.includes(o))
                 .forEach(o => stack.push(o as GameObject))
+            console.log(stack)
         }
         return found
     }
@@ -118,7 +119,7 @@ export abstract class GameObject {
 
     // as of this time, only non floor elements can be connected
     getConnected(d: Direction, model: GameModel): GameObject | undefined {
-        if(this.x && this.y && this.connectionDirs.includes(((d - this.orientation + 4) % 4) as Direction)) {
+        if(this.x !== undefined && this.y !== undefined && this.connectionDirs.includes(((d - this.orientation + 4) % 4) as Direction)) {
             let neighbour = model.getNeighbour(this.x, this.y, d)
             if(neighbour instanceof GameObject && neighbour.connectionDirs.includes(((d + 2 - neighbour.orientation + 4) % 4) as Direction )) {
                 return neighbour
@@ -132,7 +133,7 @@ export abstract class GameObject {
         let group = model.getConnectedGroup(this)
         let canMove = group
             .map(o => {
-                let target = model.getNeighbour(this.x as number, this.y as number, d)
+                let target = model.getNeighbour(o.x as number, o.y as number, d)
                 // adjust this by object specific properties
                 return target === "blank" || (target instanceof GameObject && group.includes(target))
             })
@@ -150,7 +151,10 @@ export class Wall extends GameObject {
 
 export class Player extends GameObject {
     image = playerImage
-    connectionDirs = [ 1, 2, 3, 4 ] as Direction[]
+    connectionDirs = [ 0, 1, 2, 3 ] as Direction[]
 }
 
-// player, cube connectionDirs on all sides, player needs to be saved somewhere
+export class Cube extends GameObject {
+    image = cubeImage
+    connectionDirs = [ 0, 1, 2, 3 ] as Direction[]
+}

@@ -17,16 +17,16 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
     function keyDown(e : KeyboardEvent) {
       switch(e.key) {
         case 'w':
-          controller.playerMove(1)
+          controller.playerMove(0)
           break
         case 'd':
-          controller.playerMove(2)
+          controller.playerMove(1)
           break
         case 's':
-          controller.playerMove(3)
+          controller.playerMove(2)
           break
         case 'a':
-          controller.playerMove(4)
+          controller.playerMove(3)
           break
       }
     }
@@ -35,7 +35,6 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
   })
 
 
-  console.log(model)
   let percentWidth = 100 / model.map[0].length
   let tiles: JSX.Element[] = []
   model.map.forEach(x => x.forEach(tile => {
