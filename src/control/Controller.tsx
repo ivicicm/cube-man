@@ -20,13 +20,13 @@ export default class Controller {
         let size = lines[0].length / 2
         this.model = new Model.GameModel(size, size)
 
-        lines.forEach((line, i) => {
-            for(let j = 0; j < size; j += 2) {
-                let o = mapCharToObject(line[j])
+        lines.forEach((line, j) => {
+            for(let i = 0; i < size; i++) {
+                let o = mapCharToObject(line[i*2])
                 if(o) {
                     this.model.placeObject(o, i, j, o.initFloor)
-                    if(line[j] !== ' ')
-                        o.orientation = parseInt(line[j]) as Model.Direction
+                    if(line[i*2 + 1] !== ' ')
+                        o.orientation = parseInt(line[i*2 + 1]) as Model.Direction
                 }
             }
         })

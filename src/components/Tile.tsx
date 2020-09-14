@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as Model from '../model'
+import { GameModel } from '../model'
 
-const GameLevel : React.FunctionComponent<{ gameObject: Model.GameObject, percentWidth: number, image: Model.SVG }> = function GameLevel({ gameObject, percentWidth, image}) {
+const GameLevel : React.FunctionComponent<{ gameObject: Model.GameObject, percentWidth: number, model: GameModel }> = function GameLevel({ gameObject, percentWidth, model}) {
+
+  let image = typeof gameObject.image === 'string' ? gameObject.image : gameObject.image(model)
 
   let style = {
       position: 'absolute' as 'absolute',
@@ -9,7 +12,7 @@ const GameLevel : React.FunctionComponent<{ gameObject: Model.GameObject, percen
       height: percentWidth + '%',
       left: (gameObject.x as number) * percentWidth + '%',
       top: (gameObject.y as number) * percentWidth + '%',
-      backgroundImage: image
+      backgroundImage: `url(${image})`
   }
 
   return (
