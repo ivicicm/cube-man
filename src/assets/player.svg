@@ -32,9 +32,9 @@
    inkscape:window-height="1017"
    id="namedview49"
    showgrid="false"
-   inkscape:zoom="0.5"
-   inkscape:cx="-1.5530951"
-   inkscape:cy="433.09076"
+   inkscape:zoom="1"
+   inkscape:cx="449.31387"
+   inkscape:cy="199.837"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
@@ -97,7 +97,28 @@
 <g
    id="g46">
 </g>
-<path
-   id="rect2-3"
-   style="fill:#d40000;stroke-width:0.878906"
-   d="M 31,31 V 481 H 481 V 31 H 331 v 94.03711 H 181 V 31 Z" /></svg>
+<rect
+   style="fill:#d35f5f;stroke-width:1.23774"
+   id="rect67"
+   width="31"
+   height="300"
+   x="0"
+   y="0" /><rect
+   style="fill:#ff8080"
+   id="rect69"
+   width="2.1213202"
+   height="2.8284271"
+   x="-53.033009"
+   y="231.93103" /><rect
+   style="fill:#d35f5f;stroke-width:1.23773"
+   id="rect67-8"
+   width="31"
+   height="300"
+   x="481"
+   y="0" /><rect
+   style="fill:#a02c2c;stroke-width:1.76519"
+   id="rect90"
+   width="450"
+   height="450"
+   x="31"
+   y="31" /></svg>
