@@ -1,4 +1,5 @@
 import wallImage from "../assets/brickWall.svg"
+import playerImage from "../assets/player.svg"
 
 export class MapTile {
     element?: GameObject
@@ -91,10 +92,11 @@ export class GameModel {
         let stack = [o]
         while(stack.length > 0) {
             let gameObject = stack.pop() as GameObject
+            found.push(gameObject);
             ([1, 2, 3, 4] as Direction[])
                 .map(d => gameObject.getConnected(d, this))
                 .filter(o => o && !found.includes(o))
-                .forEach(o => found.push(o as GameObject))
+                .forEach(o => stack.push(o as GameObject))
         }
         return found
     }
@@ -126,7 +128,7 @@ export abstract class GameObject {
     }
 
     // as of this time, only non floor elements can move
-    canMove(d: Direction, model: GameModel) : GameObject[] | false {
+    canMove(d: Direction, model: GameModel) : GameObject[] | undefined {
         let group = model.getConnectedGroup(this)
         let canMove = group
             .map(o => {
@@ -135,7 +137,7 @@ export abstract class GameObject {
                 return target === "blank" || (target instanceof GameObject && group.includes(target))
             })
             .reduce((x,y) => x && y)
-        return canMove && group
+        return canMove ? group : undefined
     }
 
     readonly abstract image: string | ((model: GameModel) => string)
@@ -144,6 +146,11 @@ export abstract class GameObject {
 
 export class Wall extends GameObject {
     image = wallImage
+}
+
+export class Player extends GameObject {
+    image = playerImage
+    connectionDirs = [ 1, 2, 3, 4 ] as Direction[]
 }
 
 // player, cube connectionDirs on all sides, player needs to be saved somewhere

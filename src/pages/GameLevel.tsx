@@ -1,18 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './GameLevel.module.css'
 import Controller from '../control/Controller'
 import Tile from '../components/Tile'
-import { GameObject } from '../model';
+import { GameObject, GameModel } from '../model';
 
 const GameLevel : React.FunctionComponent<{ gameChart: string }> = function GameLevel(props) {
-  const [controller] = useState(() => new Controller(props.gameChart))
+  const [model, setModel] = useState(new GameModel(1,1)) // only temporary before real model is set from controller
+  const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel))
 
-  let percentWidth = 100 / controller.model.map[0].length
+  function setImmutableModel(m: GameModel) {
+    console.log(m)
+    setModel(m)
+  }
+
+  useEffect(() => {
+    function keyDown(e : KeyboardEvent) {
+      switch(e.key) {
+        case 'w':
+          controller.playerMove(1)
+          break
+        case 'd':
+          controller.playerMove(2)
+          break
+        case 's':
+          controller.playerMove(3)
+          break
+        case 'a':
+          controller.playerMove(4)
+          break
+      }
+    }
+    document.addEventListener("keydown", keyDown)
+    return () => document.removeEventListener("keydown", keyDown)
+  })
+
+
+  console.log(model)
+  let percentWidth = 100 / model.map[0].length
   let tiles: JSX.Element[] = []
-  controller.model.map.forEach(x => x.forEach(tile => {
+  model.map.forEach(x => x.forEach(tile => {
     function objectToJsx(o: GameObject, isFloor = false) {
       let key = `${o.x} ${o.y}${isFloor && ' f'}`
-      return <Tile gameObject={o} percentWidth={percentWidth} model={controller.model} 
+      return <Tile gameObject={o} percentWidth={percentWidth} model={model} 
         key={key}
       />
     }
