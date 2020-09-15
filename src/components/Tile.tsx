@@ -13,7 +13,8 @@ const GameLevel : React.FunctionComponent<{ gameObject: Model.GameObject, percen
       left: (gameObject.x as number) * percentWidth + '%',
       top: (gameObject.y as number) * percentWidth + '%',
       backgroundImage: `url(${image})`,
-      transform: `rotate(${(gameObject.orientation - 1)*90}deg)`
+      backgroundSize: '100% 100%',
+      transform: `rotate(${(gameObject.orientation)*90}deg)`
   }
 
   return (

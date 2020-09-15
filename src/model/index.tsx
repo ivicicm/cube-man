@@ -1,7 +1,7 @@
 import wallImage from "../assets/brickWall.svg"
-import playerImage from "../assets/player.svg"
+import playerImage from "../assets/player.png"
 import cubeImage from "../assets/cube.svg"
-import drillImage from "../assets/drill.svg"
+import drillImage from "../assets/drill.png"
 
 export class MapTile {
     element?: GameObject
@@ -15,6 +15,13 @@ type Coords = {
     x: number,
     y: number
 }
+
+const MaterialStrengthEnum  = {
+    none: 0,
+    light: 1,
+    hard: 2
+}
+type MaterialStrength = 0 | 1 | 2
 
 export class GameModel {
     map: MapTile[][]
@@ -132,8 +139,14 @@ export class GameModel {
     moveGroup(group: GameObject[], d: Direction) {
         group.forEach(o => {
             let coords = this.translateCoords(o.x as number, o.y as number, d) as Coords
-            // do object type specific things
-            this.placeObject(o, coords.x, coords.y)
+            if(o.moveSideEffects) {
+                let target = this.map[coords.x][coords.y].element
+                if(!target || group.includes(target))
+                    target = undefined
+                this.placeObject(o, coords.x, coords.y)
+                o.moveSideEffects(target, d, this)
+            } else
+                this.placeObject(o, coords.x, coords.y)
         })
     }
 }
@@ -162,7 +175,7 @@ export abstract class GameObject {
             .map(o => {
                 let target = model.getNeighbour(o.x as number, o.y as number, d)
                 // adjust this by object specific properties
-                return target === "blank" || (target instanceof GameObject && group.includes(target))
+                return target === "blank" || (target instanceof GameObject && (group.includes(target) || o.canMoveOverObject(target, d, model)))
             })
             .reduce((x,y) => x && y)
         return canMove ? group : undefined
@@ -175,7 +188,12 @@ export abstract class GameObject {
                 { x: this.x as number, y: this.y as number},
                 d
             ))
-        let canRotate = endCoords.map(c => c && ( !model.map[c.x][c.y].element || group.includes(model.map[c.x][c.y].element as GameObject )))
+        let canRotate = endCoords.map(c => { 
+                if(!c)
+                    return false
+                let target = model.map[c.x][c.y].element
+                return !target || group.includes(target) || target.strength < MaterialStrengthEnum.light
+            })
             .reduce((x,y) => x && y)
         if(canRotate)
             group.forEach((o, index) => { 
@@ -187,10 +205,16 @@ export abstract class GameObject {
 
     readonly abstract image: string | ((model: GameModel) => string)
     readonly initFloor = false
+    readonly strength = MaterialStrengthEnum.light
+    canMoveOverObject(target: GameObject, d: Direction, model: GameModel) {
+        return target.strength < MaterialStrengthEnum.light
+    }
+    moveSideEffects?: (target: GameObject | undefined, d: Direction, model: GameModel) => void
 }
 
 export class Wall extends GameObject {
     image = wallImage
+    strength = MaterialStrengthEnum.hard
 }
 
 export class Player extends GameObject {
@@ -205,5 +229,16 @@ export class Cube extends GameObject {
 
 export class Drill extends GameObject {
     image = drillImage
-    connectionDirs = [ 1 ] as Direction[]
+    connectionDirs = [ 2 ] as Direction[]
+    strength = MaterialStrengthEnum.hard
+    canMoveOverObject(target: GameObject, d: Direction) {
+        return target.strength < MaterialStrengthEnum.light || d === this.orientation
+    }
+    moveSideEffects = (target: GameObject | undefined, d: Direction, model: GameModel) => {
+        console.log('moving')
+        console.log(target)
+        if(target && target.strength > MaterialStrengthEnum.light) {
+            model.map[this.x as number][this.y as number].element = undefined
+        }
+    }
 }
