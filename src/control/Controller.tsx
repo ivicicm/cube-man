@@ -14,6 +14,8 @@ function mapCharToObject(ch: string): Model.GameObject | undefined {
             return new Model.Cube()
         case 'd':
             return new Model.Drill()
+        case 'l':
+            return new Model.Laser()
         default:
             throw  new Error('Unknown character in level text file.')
     }
@@ -43,6 +45,7 @@ export default class Controller {
                 }
             }
         })
+        this.execStaticActions()
         this.setToScreen(deepCopy(this.model))
     }
 
@@ -55,16 +58,38 @@ export default class Controller {
                 let group = this.player.canMove(d, this.model)
                 if(group) {
                     this.model.moveGroup(group, d)
+                    this.execStaticActions()
                     this.setToScreen(deepCopy(this.model))
                 }
             }
             else {
-                if(this.player && this.player.rotateIfPossible(d as 'rotate left' | 'rotate right', this.model))
+                if(this.player && this.player.rotateIfPossible(d as 'rotate left' | 'rotate right', this.model)) {
+                    this.execStaticActions()
                     this.setToScreen(deepCopy(this.model))
+                }
             }
         }
         finally {
             this.waitingForInput = true
         }
+    }
+
+    execStaticActions() {
+        let actions: (Model.StaticAction & { o: Model.GameObject })[] = []
+        for(let column of this.model.map) {
+            for(let tile of column)
+                for(let element of [tile.element, tile.floorElement]) {
+                    if(element && element.temporary) {
+                        this.model.map[element.x as number][element.y as number].element = undefined
+                    }
+                    else if(element && element.staticActions.length > 0) {
+                        element.staticActions
+                            .map(x => ({o: element as Model.GameObject, ...x}))
+                            .forEach(x => actions.push(x))
+                    }
+                }
+        }
+        actions.sort((a,b) => a.priority - b.priority)
+        actions.forEach(a => a.action.call(a.o, this.model))
     }
 }

@@ -2,6 +2,8 @@ import wallImage from "../assets/brickWall.svg"
 import playerImage from "../assets/player.png"
 import cubeImage from "../assets/cube.svg"
 import drillImage from "../assets/drill.png"
+import laserImage from "../assets/laser.png"
+import rayImage from "../assets/ray.png"
 
 export class MapTile {
     element?: GameObject
@@ -10,6 +12,11 @@ export class MapTile {
 
 export type Direction = 0 | 1 | 2 | 3 
 export type Rotation = "rotate left" | "rotate right"
+
+export type StaticAction = {
+    priority: number,
+    action: (model: GameModel) => void
+}
 
 type Coords = {
     x: number,
@@ -56,28 +63,28 @@ export class GameModel {
         o.y = y
     }
 
-    private translateCoords(x: number, y: number, d: Direction): Coords | undefined {
+    translateCoords(x: number, y: number, d: Direction, distance: number = 1): Coords | undefined {
         switch(d) {
             case 0: {
-                y--
+                y-= distance
                 if(y < 0)
                     return undefined
                 break
             }
             case 1: {
-                x++
+                x+= distance
                 if(x >= this.map.length)
                     return undefined
                 break
             }
             case 2: {
-                y++
+                y+= distance
                 if(y >= this.map[0].length)
                     return undefined
                 break
             }
             case 3: {
-                x--
+                x-= distance
                 if(x < 0)
                     return undefined
                 break
@@ -111,8 +118,8 @@ export class GameModel {
             result : undefined
     }
 
-    getNeighbour(x: number, y: number, d: Direction, isFloor = false): GameObject | "blank" | "outOfMap" {
-        let coords = this.translateCoords(x, y, d)
+    getNeighbour(x: number, y: number, d: Direction, distance = 1, isFloor = false): GameObject | "blank" | "outOfMap" {
+        let coords = this.translateCoords(x, y, d, distance)
         if(!coords)
             return "outOfMap"
         if(isFloor)
@@ -210,6 +217,8 @@ export abstract class GameObject {
         return target.strength < MaterialStrengthEnum.light
     }
     moveSideEffects?: (target: GameObject | undefined, d: Direction, model: GameModel) => void
+    staticActions: StaticAction[] = []
+    readonly temporary: boolean = false
 }
 
 export class Wall extends GameObject {
@@ -235,10 +244,37 @@ export class Drill extends GameObject {
         return target.strength < MaterialStrengthEnum.light || d === this.orientation
     }
     moveSideEffects = (target: GameObject | undefined, d: Direction, model: GameModel) => {
-        console.log('moving')
-        console.log(target)
         if(target && target.strength > MaterialStrengthEnum.light) {
             model.map[this.x as number][this.y as number].element = undefined
         }
     }
+}
+
+export class Laser extends GameObject {
+    image = laserImage
+    connectionDirs = [ 2 ] as Direction[]
+    strength = MaterialStrengthEnum.hard
+    staticActions = [{
+        priority: 5,
+        action: function laserRay(this: Laser, model: GameModel) {
+            let distance = 1
+            while(true) {
+                let next = model.getNeighbour(this.x as number, this.y as number, this.orientation, distance)
+                if(next === 'blank' || (next instanceof GameObject && next.strength < MaterialStrengthEnum.hard )) {
+                    let coords = model.translateCoords(this.x as number, this.y as number, this.orientation, distance) as Coords
+                    let ray = new Ray()
+                    ray.orientation = this.orientation
+                    model.placeObject(ray, coords.x, coords.y)
+                } else
+                    return
+                distance++
+            }
+        }
+    }]
+}
+
+export class Ray extends GameObject {
+    image = rayImage
+    strength = MaterialStrengthEnum.none
+    temporary = true
 }
