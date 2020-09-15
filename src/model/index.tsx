@@ -1,6 +1,7 @@
 import wallImage from "../assets/brickWall.svg"
 import playerImage from "../assets/player.svg"
 import cubeImage from "../assets/cube.svg"
+import drillImage from "../assets/drill.svg"
 
 export class MapTile {
     element?: GameObject
@@ -200,4 +201,9 @@ export class Player extends GameObject {
 export class Cube extends GameObject {
     image = cubeImage
     connectionDirs = [ 0, 1, 2, 3 ] as Direction[]
+}
+
+export class Drill extends GameObject {
+    image = drillImage
+    connectionDirs = [ 1 ] as Direction[]
 }

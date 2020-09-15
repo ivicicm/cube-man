@@ -12,6 +12,8 @@ function mapCharToObject(ch: string): Model.GameObject | undefined {
             return new Model.Player()
         case 'c':
             return new Model.Cube()
+        case 'd':
+            return new Model.Drill()
         default:
             throw  new Error('Unknown character in level text file.')
     }
