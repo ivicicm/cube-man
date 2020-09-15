@@ -16,6 +16,8 @@ function mapCharToObject(ch: string): Model.GameObject | undefined {
             return new Model.Drill()
         case 'l':
             return new Model.Laser()
+        case 's':
+            return new Model.Star()
         default:
             throw  new Error('Unknown character in level text file.')
     }
@@ -23,12 +25,13 @@ function mapCharToObject(ch: string): Model.GameObject | undefined {
 
 export default class Controller {
     model: Model.GameModel
-    player?: Model.Player
     waitingForInput = true
     setToScreen: (model: Model.GameModel) => void
+    gameEnd: (playerWon: boolean) => void
 
-    constructor(gameChart: string, setToScreen: (model: Model.GameModel) => void) {
+    constructor(gameChart: string, setToScreen: (model: Model.GameModel) => void, gameEnd: (playerWon: boolean) => void) {
         this.setToScreen = setToScreen
+        this.gameEnd = gameEnd
         let lines = gameChart.split(/\r?\n/)
         let size = lines[0].length / 2
         this.model = new Model.GameModel(size, size)
@@ -41,7 +44,9 @@ export default class Controller {
                     if(line[i*2 + 1] !== ' ')
                         o.orientation = parseInt(line[i*2 + 1]) as Model.Direction
                     if(o instanceof Model.Player)
-                        this.player = o
+                        this.model.player = o
+                    if(o instanceof Model.Star)
+                        this.model.totalStars++
                 }
             }
         })
@@ -54,8 +59,8 @@ export default class Controller {
             return
         try {
             this.waitingForInput = false
-            if(typeof d !== 'string' && this.player) {
-                let group = this.player.canMove(d, this.model)
+            if(typeof d !== 'string' && this.model.player) {
+                let group = this.model.player.canMove(d, this.model)
                 if(group) {
                     this.model.moveGroup(group, d)
                     this.execStaticActions()
@@ -63,7 +68,7 @@ export default class Controller {
                 }
             }
             else {
-                if(this.player && this.player.rotateIfPossible(d as 'rotate left' | 'rotate right', this.model)) {
+                if(this.model.player && this.model.player.rotateIfPossible(d as 'rotate left' | 'rotate right', this.model)) {
                     this.execStaticActions()
                     this.setToScreen(deepCopy(this.model))
                 }
@@ -75,6 +80,7 @@ export default class Controller {
     }
 
     execStaticActions() {
+        this.model.starCounter = 0
         let actions: (Model.StaticAction & { o: Model.GameObject })[] = []
         for(let column of this.model.map) {
             for(let tile of column)
@@ -91,5 +97,15 @@ export default class Controller {
         }
         actions.sort((a,b) => a.priority - b.priority)
         actions.forEach(a => a.action.call(a.o, this.model))
+        if(this.model.starCounter >= this.model.totalStars) {
+            this.gameEnd(true)
+        }
+        else if(!this.model.player 
+            || this.model.player.x === undefined
+            || this.model.player.y === undefined
+            || !(this.model.map[this.model.player.x][this.model.player.y].element instanceof Model.Player)
+        ) {
+            this.gameEnd(false)
+        }
     }
 }

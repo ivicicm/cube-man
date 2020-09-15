@@ -24,12 +24,17 @@ const modalStyles = {
 
 const GameLevel : React.FunctionComponent<{ gameChart: string }> = function GameLevel(props) {
   const [model, setModel] = useState(new GameModel(1,1)) // only temporary before real model is set from controller
-  const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel))
+  const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel, gameEnd))
   const [modalOpen, setModalOpen] = useState(false)
   const [state, setState] = useState<'playing' | 'won' | 'lost'>('playing')
 
   function setImmutableModel(m: GameModel) {
     setModel(m)
+  }
+
+  function gameEnd(playerWon: boolean) {
+    setState(playerWon ? 'won' : 'lost')
+    setModalOpen(true)
   }
 
   function escPressed() {
@@ -38,7 +43,7 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
 
   useEffect(() => {
     function keyDown(e : KeyboardEvent) {
-      if(modalOpen && e.key !== 'Escape' && state === 'playing')
+      if(modalOpen && (e.key !== 'Escape' || state !== 'playing'))
         return
       switch(e.key) {
         case 'w':
@@ -81,14 +86,14 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
     if(tile.floorElement)
       tiles.push(objectToJsx(tile.floorElement, true))
     if(tile.element)
-      tiles.push(objectToJsx(tile.element, true))
+      tiles.push(objectToJsx(tile.element))
   }))
   return (
     <div>
       <div className={styles.map}>
         {tiles}
       </div>
-      <Modal isOpen={modalOpen} style={modalStyles} onRequestClose={() => setModalOpen(false)}>
+      <Modal isOpen={modalOpen} style={modalStyles} onRequestClose={state === 'playing' ? (() => setModalOpen(false)) : undefined}>
             {state !== 'playing' && 
               <p className={styles.endGameText}>{state === 'won' ? 'Level completed' : 'Character died'}</p>
             }

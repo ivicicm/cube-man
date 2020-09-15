@@ -4,6 +4,7 @@ import cubeImage from "../assets/cube.svg"
 import drillImage from "../assets/drill.png"
 import laserImage from "../assets/laser.png"
 import rayImage from "../assets/ray.png"
+import starImage from "../assets/star.svg"
 
 export class MapTile {
     element?: GameObject
@@ -32,6 +33,9 @@ type MaterialStrength = 0 | 1 | 2
 
 export class GameModel {
     map: MapTile[][]
+    starCounter = 0
+    totalStars = 0
+    player?: Player
 
     constructor(x: number, y: number) {
         this.map = []
@@ -211,7 +215,7 @@ export abstract class GameObject {
     }
 
     readonly abstract image: string | ((model: GameModel) => string)
-    readonly initFloor = false
+    readonly initFloor: boolean = false
     readonly strength = MaterialStrengthEnum.light
     canMoveOverObject(target: GameObject, d: Direction, model: GameModel) {
         return target.strength < MaterialStrengthEnum.light
@@ -277,4 +281,18 @@ export class Ray extends GameObject {
     image = rayImage
     strength = MaterialStrengthEnum.none
     temporary = true
+}
+
+export class Star extends GameObject {
+    image = starImage
+    initFloor = true
+    staticActions = [{
+        priority: 10,
+        action: function registerStar(this: Star, model: GameModel) {
+            let o = model.map[this.x as number][this.y as number].element
+            if(o && model.player && model.getConnectedGroup(o).includes(model.player)) {
+                model.starCounter++
+            }
+        }
+    }]
 }
