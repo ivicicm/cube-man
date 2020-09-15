@@ -4,7 +4,9 @@ import './index.css';
 import GameLevel from './pages/GameLevel';
 import * as serviceWorker from './serviceWorker';
 import level from './levels/1.txt'
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root')
 
 ReactDOM.render(
   <React.StrictMode>

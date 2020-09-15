@@ -6,3 +6,26 @@
     margin-top: 5vmin;
     position: relative;
 }
+
+.menuButton {
+    background-color: crimson;
+    color: black;
+    padding: 0.5em 1.5em;
+    margin: 1em 2em;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.cancelButton {
+    margin-top: 2em;
+}
+
+.endGameText {
+    color: grey;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    
+}

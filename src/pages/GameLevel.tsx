@@ -3,18 +3,43 @@ import styles from './GameLevel.module.css'
 import Controller from '../control/Controller'
 import Tile from '../components/Tile'
 import { GameObject, GameModel } from '../model';
+import Modal from 'react-modal';
+
+const modalStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    border                : '5px dashed grey',
+    backgroundColor                 : 'black',
+    color                 : 'white'
+  },
+  overlay : {
+    backgroundColor       : 'rgba(0, 0, 0, 0.5)'
+  }
+};
 
 const GameLevel : React.FunctionComponent<{ gameChart: string }> = function GameLevel(props) {
   const [model, setModel] = useState(new GameModel(1,1)) // only temporary before real model is set from controller
   const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel))
+  const [modalOpen, setModalOpen] = useState(false)
+  const [state, setState] = useState<'playing' | 'won' | 'lost'>('playing')
 
   function setImmutableModel(m: GameModel) {
-    console.log(m)
     setModel(m)
+  }
+
+  function escPressed() {
+    setModalOpen(!modalOpen)
   }
 
   useEffect(() => {
     function keyDown(e : KeyboardEvent) {
+      if(modalOpen && e.key !== 'Escape' && state === 'playing')
+        return
       switch(e.key) {
         case 'w':
           controller.playerMove(0)
@@ -33,6 +58,9 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
           break
         case 'e':
           controller.playerMove("rotate right")
+          break
+        case 'Escape':
+          escPressed()
           break
       }
     }
@@ -56,8 +84,19 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
       tiles.push(objectToJsx(tile.element, true))
   }))
   return (
-    <div className={styles.map}>
-      {tiles}
+    <div>
+      <div className={styles.map}>
+        {tiles}
+      </div>
+      <Modal isOpen={modalOpen} style={modalStyles} onRequestClose={() => setModalOpen(false)}>
+            {state !== 'playing' && 
+              <p className={styles.endGameText}>{state === 'won' ? 'Level completed' : 'Character died'}</p>
+            }
+            {state === 'won' && <div className={styles.menuButton}>Next level</div>}
+            <div className={styles.menuButton}>Restart</div>
+            <div className={styles.menuButton}>To Menu</div>
+            {state === 'playing' && <div className={`${styles.menuButton} ${styles.cancelButton}`} onClick={() => setModalOpen(false)}>Cancel</div>}
+      </Modal>
     </div>
   );
 }
