@@ -1,9 +1,8 @@
 .map {
     background-color: #222;
-    width: 95vmin;
-    height: 95vmin;
+    width: 100vmin;
+    height: 100vmin;
     margin: auto;
-    margin-top: 2.5vmin;
     position: relative;
 }
 

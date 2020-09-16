@@ -1,0 +1,15 @@
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _0
+_ w w2w2w2w2w2w2w2w2w2w2w2w _0
+_ w w2w2w2w2w2w2w2w2w2w2w2w _0
+_ w w2w2w2w2w2w2w2w2w2w2w2w _0
+_ w w2w2w2w2w2s s w2w2w2w2w _0
+_ w w2w2w2w2w2s w2w2w2w2w2w _0
+_ w w2w2w2w2w2s s w2w2w2w2w _0
+_ w w2w2w2w2w2s w2w2w2w2w2w _0
+_ _ _ _ _ _ _ s _ _ _ _ _ _ _0
+_ _ _ _ c c s s s _ _ c _ _ _0
+_ _ _ _ _ _ _ s c _ _ _ _ _ _0
+_ c _ _ _ _ _ _ c _ _ _ _ _ _0
+_ _ _ _ _ _ _ _ c _ _ _ _ _ _0
+_ p1_ _ c c _ _ _ _ _ c _ _ _0
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _0

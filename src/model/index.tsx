@@ -165,7 +165,7 @@ export class GameModel {
 export abstract class GameObject {
     x?: number
     y?: number
-    orientation: Direction = 1
+    orientation: Direction = 0
     readonly connectionDirs: Direction[] = []
 
     // as of this time, only non floor elements can be connected

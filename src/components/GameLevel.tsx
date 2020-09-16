@@ -23,7 +23,7 @@ const modalStyles = {
   }
 };
 
-const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean, setLevelCount: (x: number) => void, level: number}> = function GameLevel(props) {
+const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean, levelPassed: (x: number) => void, level: number}> = function GameLevel(props) {
   const [model, setModel] = useState(new GameModel(1,1)) // only temporary before real model is set from controller
   const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel, gameEnd))
   const [modalOpen, setModalOpen] = useState(false)
@@ -36,6 +36,9 @@ const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean, 
 
   function gameEnd(playerWon: boolean) {
     setState(playerWon ? 'won' : 'lost')
+    if(playerWon) {
+      props.levelPassed(props.level)
+    }
     setModalOpen(true)
   }
 
@@ -44,7 +47,6 @@ const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean, 
   }
 
   function nextLevel() {
-    props.setLevelCount(props.level + 1)
     history.push((props.level + 1).toString())
   }
 

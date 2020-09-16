@@ -1,0 +1,15 @@
+w w w w w w w _ _ _ _ _ _ _ _0
+w w w w w w w _ _ w w w w w _0
+w w w w w w w c _ w _ _ _ w _0
+w w w c _ c _ c _ w _ s _ w _0
+w w w _ w w w c _ w _ _ _ w _0
+w w w c w w w _ _ w w w w w _0
+w w w _ w w w  _ _ _ _ _ _ __0
+w w w c w w w w w w w w w w w0
+w w w _ w w w w w w w w w w w0
+w w c c c _ c _ c _ _ _ _ w w0
+w w _ _ _ _ c _ c _ d3_ _ w w0
+w w _ _ _ _ c _ c _ _ _ _ w w0
+w w w w w w w w w w w _ w w w0
+w w w w w w w w w w w _ _ _ w0
+w w w w w w w w w w w w w p w0
