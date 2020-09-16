@@ -1,0 +1,29 @@
+.container {
+    margin-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selectLevel {
+    color: white;
+    font-size: 2em;
+    /* font-family: 'Cinzel', serif; */
+}
+
+.levelContainer {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 2em;
+}
+
+.level {
+    color: black;
+    background-color: crimson;
+    width: 4em;
+    text-align: center;
+    padding: 1em 0;
+    font-size: 2em;
+    margin: 1em;
+    text-decoration: none;
+}

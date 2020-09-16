@@ -4,6 +4,7 @@ import Controller from '../control/Controller'
 import Tile from './Tile'
 import { GameObject, GameModel } from '../model';
 import Modal from 'react-modal';
+import { useHistory } from 'react-router-dom';
 
 const modalStyles = {
   content : {
@@ -22,11 +23,12 @@ const modalStyles = {
   }
 };
 
-const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean }> = function GameLevel(props) {
+const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean, setLevelCount: (x: number) => void, level: number}> = function GameLevel(props) {
   const [model, setModel] = useState(new GameModel(1,1)) // only temporary before real model is set from controller
   const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel, gameEnd))
   const [modalOpen, setModalOpen] = useState(false)
   const [state, setState] = useState<'playing' | 'won' | 'lost'>('playing')
+  const history = useHistory()
 
   function setImmutableModel(m: GameModel) {
     setModel(m)
@@ -39,6 +41,11 @@ const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean }
 
   function escPressed() {
     setModalOpen(!modalOpen)
+  }
+
+  function nextLevel() {
+    props.setLevelCount(props.level + 1)
+    history.push((props.level + 1).toString())
   }
 
   useEffect(() => {
@@ -95,11 +102,14 @@ const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean }
       </div>
       <Modal isOpen={modalOpen} style={modalStyles} onRequestClose={state === 'playing' ? (() => setModalOpen(false)) : undefined}>
             {state !== 'playing' && 
-              <p className={styles.endGameText}>{state === 'won' ? 'Level completed' : 'Character died'}</p>
+              <p className={styles.endGameText}>{
+                state === 'won' ? 
+                (props.isLast ? 'All levels currently in the game completed!' : 'Level completed') 
+                : 'Character died'}</p>
             }
-            {state === 'won' && !props.isLast && <div className={styles.menuButton}>Next level</div>}
-            <div className={styles.menuButton}>Restart</div>
-            <div className={styles.menuButton}>To Menu</div>
+            {state === 'won' && !props.isLast && <div className={styles.menuButton} onClick={nextLevel}>Next level</div>}
+            <div className={styles.menuButton} onClick={() => history.go(0)}>Restart</div>
+            <div className={styles.menuButton} onClick={() => history.push('/levels')}>To Menu</div>
             {state === 'playing' && <div className={`${styles.menuButton} ${styles.cancelButton}`} onClick={() => setModalOpen(false)}>Cancel</div>}
       </Modal>
     </div>
