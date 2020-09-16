@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import level1 from './levels/1.txt'
+import level1andquarter from './levels/1andquarter.txt'
 import level1andhalf from './levels/1andhalf.txt'
 import level2 from './levels/2.txt'
 import level3 from './levels/3.txt'
@@ -18,6 +19,7 @@ const App = function App() {
 
   let levels = [
       level1,
+      level1andquarter,
       level1andhalf,
       level2,
       level3,
