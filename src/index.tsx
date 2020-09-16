@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import GameLevel from './pages/GameLevel';
 import * as serviceWorker from './serviceWorker';
-import level from './levels/1.txt'
 import Modal from 'react-modal';
+import App from './App'
 
 Modal.setAppElement('#root')
 
 ReactDOM.render(
   <React.StrictMode>
-    <GameLevel gameChart={level}/>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );

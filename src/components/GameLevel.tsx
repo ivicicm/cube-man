@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './GameLevel.module.css'
 import Controller from '../control/Controller'
-import Tile from '../components/Tile'
+import Tile from './Tile'
 import { GameObject, GameModel } from '../model';
 import Modal from 'react-modal';
 
@@ -22,7 +22,7 @@ const modalStyles = {
   }
 };
 
-const GameLevel : React.FunctionComponent<{ gameChart: string }> = function GameLevel(props) {
+const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean }> = function GameLevel(props) {
   const [model, setModel] = useState(new GameModel(1,1)) // only temporary before real model is set from controller
   const [controller] = useState(() => new Controller(props.gameChart, setImmutableModel, gameEnd))
   const [modalOpen, setModalOpen] = useState(false)
@@ -97,7 +97,7 @@ const GameLevel : React.FunctionComponent<{ gameChart: string }> = function Game
             {state !== 'playing' && 
               <p className={styles.endGameText}>{state === 'won' ? 'Level completed' : 'Character died'}</p>
             }
-            {state === 'won' && <div className={styles.menuButton}>Next level</div>}
+            {state === 'won' && !props.isLast && <div className={styles.menuButton}>Next level</div>}
             <div className={styles.menuButton}>Restart</div>
             <div className={styles.menuButton}>To Menu</div>
             {state === 'playing' && <div className={`${styles.menuButton} ${styles.cancelButton}`} onClick={() => setModalOpen(false)}>Cancel</div>}
