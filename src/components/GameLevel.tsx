@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import styles from './GameLevel.module.css'
 import Controller from '../control/Controller'
 import Tile from './Tile'
-import { GameObject, GameModel } from '../model';
+import { GameObject, GameModel, Coords } from '../model';
 import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
+import Instructions from './Instructions'
 
 const modalStyles = {
   content : {
@@ -101,6 +102,7 @@ const GameLevel : React.FunctionComponent<{ gameChart: string, isLast: boolean, 
     <div>
       <div className={styles.map}>
         {tiles}
+        {model.instructionCorners && <Instructions percentWidth={percentWidth} corners={model.instructionCorners as Coords[]}/>}  
       </div>
       <Modal isOpen={modalOpen} style={modalStyles} onRequestClose={state === 'playing' ? (() => setModalOpen(false)) : undefined}>
             {state !== 'playing' && 

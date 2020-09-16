@@ -1,7 +1,7 @@
 import * as Model from  '../model/index'
 import { deepCopy } from '../utils/general'
 
-function mapCharToObject(ch: string): Model.GameObject | undefined {
+function mapCharToObject(ch: string): Model.GameObject | undefined | 'instructions corner' {
     switch(ch) {
         case ' ':
         case '_':
@@ -18,6 +18,8 @@ function mapCharToObject(ch: string): Model.GameObject | undefined {
             return new Model.Laser()
         case 's':
             return new Model.Star()
+        case 'i':
+            return 'instructions corner'
         default:
             throw  new Error('Unknown character in level text file.')
     }
@@ -39,7 +41,12 @@ export default class Controller {
         lines.forEach((line, j) => {
             for(let i = 0; i < size; i++) {
                 let o = mapCharToObject(line[i*2])
-                if(o) {
+                if(o === 'instructions corner'){ 
+                    if(!this.model.instructionCorners)
+                        this.model.instructionCorners = []
+                    this.model.instructionCorners.push({x: i, y: j})
+                }
+                else if(o) {
                     this.model.placeObject(o, i, j, o.initFloor)
                     if(line[i*2 + 1] !== ' ')
                         o.orientation = parseInt(line[i*2 + 1]) as Model.Direction

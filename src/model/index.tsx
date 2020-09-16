@@ -19,7 +19,7 @@ export type StaticAction = {
     action: (model: GameModel) => void
 }
 
-type Coords = {
+export type Coords = {
     x: number,
     y: number
 }
@@ -36,6 +36,7 @@ export class GameModel {
     starCounter = 0
     totalStars = 0
     player?: Player
+    instructionCorners?: Coords[] // top left and bottom right corner
 
     constructor(x: number, y: number) {
         this.map = []
