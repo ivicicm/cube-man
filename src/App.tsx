@@ -6,6 +6,10 @@ import level2 from './levels/2.txt'
 import level3 from './levels/3.txt'
 import level4 from './levels/4.txt'
 import d1 from './levels/d1.txt'
+import d2 from './levels/d2.txt'
+import d3 from './levels/d3.txt'
+import d4 from './levels/d4.txt'
+import d5 from './levels/d5.txt'
 import GameLevel from './components/GameLevel'
 import Intro from './components/Intro'
 import SelectLevel from './components/LevelSelect'
@@ -24,7 +28,11 @@ const App = function App() {
       level2,
       level3,
       level4,
-      d1
+      d1,
+      d2,
+      d3,
+      d4,
+      d5
   ]
   let [levelCount, setLevelCount] = useState(() => {
     let storageLevelCount = window.localStorage.getItem('levelCount');

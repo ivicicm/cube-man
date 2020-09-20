@@ -4,6 +4,7 @@ import cubeImage from "../assets/cube.svg"
 import drillImage from "../assets/drill.png"
 import laserImage from "../assets/laser.png"
 import rayImage from "../assets/ray.png"
+import crossRayImage from "../assets/raycross.png"
 import starImage from "../assets/star.svg"
 
 export class MapTile {
@@ -265,7 +266,11 @@ export class Laser extends GameObject {
             let distance = 1
             while(true) {
                 let next = model.getNeighbour(this.x as number, this.y as number, this.orientation, distance)
-                if(next === 'blank' || (next instanceof GameObject && next.strength < MaterialStrengthEnum.hard )) {
+                if(next instanceof Ray) {
+                    if(!next.crossRays && (next.orientation + this.orientation) % 2 === 1)
+                        next.crossRays = true;
+                }
+                else if(next === 'blank' || (next instanceof GameObject && next.strength < MaterialStrengthEnum.hard )) {
                     let coords = model.translateCoords(this.x as number, this.y as number, this.orientation, distance) as Coords
                     let ray = new Ray()
                     ray.orientation = this.orientation
@@ -279,7 +284,8 @@ export class Laser extends GameObject {
 }
 
 export class Ray extends GameObject {
-    image = rayImage
+    crossRays: boolean = false
+    image = (model: GameModel) => this.crossRays ? crossRayImage : rayImage
     strength = MaterialStrengthEnum.none
     temporary = true
 }
