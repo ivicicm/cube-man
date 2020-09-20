@@ -27,7 +27,7 @@ const Intro = function Intro() {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.name}>Cube man</h1>
+            <h1 className={styles.name}>Cube Man</h1>
             <img src={cubeMan} alt="cube man" className="logoimage"/>
         </div>
     );
