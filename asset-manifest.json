@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/cube-man/static/css/main.72a52174.chunk.css",
+    "main.js": "/cube-man/static/js/main.8d9d5261.chunk.js",
+    "main.js.map": "/cube-man/static/js/main.8d9d5261.chunk.js.map",
+    "runtime-main.js": "/cube-man/static/js/runtime-main.b87cafb6.js",
+    "runtime-main.js.map": "/cube-man/static/js/runtime-main.b87cafb6.js.map",
+    "static/js/2.685638d5.chunk.js": "/cube-man/static/js/2.685638d5.chunk.js",
+    "static/js/2.685638d5.chunk.js.map": "/cube-man/static/js/2.685638d5.chunk.js.map",
+    "index.html": "/cube-man/index.html",
+    "precache-manifest.611323acb3952593081dd4166cec06e8.js": "/cube-man/precache-manifest.611323acb3952593081dd4166cec06e8.js",
+    "service-worker.js": "/cube-man/service-worker.js",
+    "static/css/main.72a52174.chunk.css.map": "/cube-man/static/css/main.72a52174.chunk.css.map",
+    "static/js/2.685638d5.chunk.js.LICENSE.txt": "/cube-man/static/js/2.685638d5.chunk.js.LICENSE.txt",
+    "static/media/brickWall.svg": "/cube-man/static/media/brickWall.acb77816.svg",
+    "static/media/cube.svg": "/cube-man/static/media/cube.bcc8edaf.svg",
+    "static/media/cubeman.png": "/cube-man/static/media/cubeman.95bca3c5.png",
+    "static/media/drill.png": "/cube-man/static/media/drill.0a0764e9.png",
+    "static/media/star.svg": "/cube-man/static/media/star.deabd352.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b87cafb6.js",
+    "static/js/2.685638d5.chunk.js",
+    "static/css/main.72a52174.chunk.css",
+    "static/js/main.8d9d5261.chunk.js"
+  ]
+}
