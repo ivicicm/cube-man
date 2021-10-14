@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "388ac5243b2818bf053c6229ad5ae8f6",
+    "revision": "a581d76853deb96e5b95ff47ab3c6195",
     "url": "/cube-man/index.html"
   },
   {
-    "revision": "a90fb44e8fe4d2e3a724",
+    "revision": "e8c0abff19270ded96b2",
     "url": "/cube-man/static/css/main.72a52174.chunk.css"
   },
   {
-    "revision": "c9ee1894a1180670c3da",
-    "url": "/cube-man/static/js/2.1c9093ee.chunk.js"
+    "revision": "54ec124d1948fa630063",
+    "url": "/cube-man/static/js/2.685638d5.chunk.js"
   },
   {
     "revision": "a1a636632721a402612df3e043dd630d",
-    "url": "/cube-man/static/js/2.1c9093ee.chunk.js.LICENSE.txt"
+    "url": "/cube-man/static/js/2.685638d5.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a90fb44e8fe4d2e3a724",
-    "url": "/cube-man/static/js/main.787b7ef2.chunk.js"
+    "revision": "e8c0abff19270ded96b2",
+    "url": "/cube-man/static/js/main.2aa2e465.chunk.js"
   },
   {
     "revision": "1aa340b66f38f5c597ae",
